@@ -4,9 +4,12 @@ import lombok.AllArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.otus.taxi.dto.TaxiCarDTO;
+import ru.otus.common.dto.TaxiDTO;
+import ru.otus.common.dto.TaxiStartWorkDTO;
 import ru.otus.taxi.model.TaxiCar;
 import ru.otus.taxi.model.TaxiColor;
+import ru.otus.taxi.model.TaxiState;
+import ru.otus.taxi.model.TaxiStatus;
 import ru.otus.taxi.repository.TaxiCarRepository;
 
 import java.util.*;
@@ -39,31 +42,41 @@ public class TaxiCarService {
         );
     }
 
-    public TaxiCar createTaxiCar(TaxiCarDTO taxiCarDTO) {
-        return taxiCarRepository.save(fillTaxiCar(new TaxiCar(), taxiCarDTO));
+    public TaxiCar createTaxiCar(TaxiDTO taxiCreateDTO) {
+        return taxiCarRepository.save(fillTaxiCar(new TaxiCar(), taxiCreateDTO));
     }
 
-    public TaxiCar updateTaxiCar(UUID id, TaxiCarDTO taxiCarDTO) {
+    /*public TaxiCar createTaxiCar(TaxiCarDTO taxiCarDTO) {
+        return taxiCarRepository.save(fillTaxiCar(new TaxiCar(), taxiCarDTO));
+    }*/
+
+    public TaxiCar updateTaxiCar(UUID id, TaxiDTO taxiCarDTO) {
         return taxiCarRepository.findById(id)
                 .map(taxiCar -> taxiCarRepository.save(fillTaxiCar(taxiCar, taxiCarDTO)))
                 .orElse(null);
     }
 
-    private TaxiCar fillTaxiCar(TaxiCar taxiCar, TaxiCarDTO taxiCarDTO) {
-        if (taxiCarDTO.getDriverName() != null) {
-            taxiCar.setDriverName(taxiCarDTO.getDriverName());
+    private TaxiCar fillTaxiCar(TaxiCar taxiCar, TaxiDTO taxiCarDTO) {
+        if (taxiCarDTO.getFirstName() != null) {
+            taxiCar.setFirstName(taxiCarDTO.getFirstName());
         }
-        if (taxiCarDTO.getDriverPhone() != null) {
-            taxiCar.setDriverPhone(taxiCarDTO.getDriverPhone());
+        if (taxiCarDTO.getLastName() != null) {
+            taxiCar.setLastName(taxiCarDTO.getLastName());
         }
-        if (taxiCarDTO.getNumber() != null) {
-            taxiCar.setNumber(taxiCarDTO.getNumber());
+        if (taxiCarDTO.getPhone() != null) {
+            taxiCar.setPhone(taxiCarDTO.getPhone());
         }
-        if (taxiCarDTO.getColor() != null) {
-            taxiCar.setColor(TaxiColor.fromId(taxiCarDTO.getColor()));
+        if (taxiCarDTO.getEmail() != null) {
+            taxiCar.setEmail(taxiCarDTO.getEmail());
         }
-        if (taxiCarDTO.getTaxiModel() != null) {
-            taxiCar.setModel(taxiModelService.findByName(taxiCarDTO.getTaxiModel())
+        if (taxiCarDTO.getCarNumber() != null) {
+            taxiCar.setCarNumber(taxiCarDTO.getCarNumber());
+        }
+        if (taxiCarDTO.getCarColor() != null) {
+            taxiCar.setCarColor(TaxiColor.fromId(taxiCarDTO.getCarColor()));
+        }
+        if (taxiCarDTO.getCarModel() != null) {
+            taxiCar.setModel(taxiModelService.findByName(taxiCarDTO.getCarModel())
                     .orElse(taxiModelService.findByName("Rio").orElse(null)));
         }
         return taxiCar;
@@ -76,5 +89,14 @@ public class TaxiCarService {
         calendar.setTime(new Date());
         calendar.add(Calendar.HOUR_OF_DAY, -INACTIVITY_PERIOD);
         taxiCarRepository.setNotWorkingTaxiStatus(calendar.getTime());
+    }
+
+    public void startWork(TaxiStartWorkDTO taxiStartWorkDTO) {
+        TaxiCar taxiCar = taxiCarRepository.findByPhone(taxiStartWorkDTO.getPhone());
+        if (taxiCar != null) {
+            taxiCar.setState(TaxiState.WORKING);
+            taxiCar.setStatus(TaxiStatus.FREE);
+            taxiCarRepository.save(taxiCar);
+        }
     }
 }

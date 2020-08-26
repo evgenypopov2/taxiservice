@@ -14,10 +14,12 @@ public class TaxiCar {
     @Id
     private UUID id = UUID.randomUUID();
 
-    private String driverName;
-    private String driverPhone;
-    private String number;
-    private TaxiColor color;
+    private String firstName;
+    private String lastName;
+    private String phone;
+    private String email;
+    private String carNumber;
+    private TaxiColor carColor;
     private TaxiState state = TaxiState.NOT_WORKING;
     private TaxiStatus status;
     private Double lastLocationLat;

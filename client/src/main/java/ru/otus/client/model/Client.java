@@ -13,28 +13,9 @@ import java.util.UUID;
 @Table(name="client")
 public class Client {
     @Id
-    @Column(name = "id")
     private UUID id = UUID.randomUUID();
-
-    @Column(name = "name")
-    private String name;
-
-    @Column(name = "phone")
+    private String firstName;
+    private String lastName;
     private String phone;
-
-//    @OneToMany(
-//            mappedBy = "client",
-//            cascade = CascadeType.ALL,
-//            orphanRemoval = true
-//    )
-//    private List<ClientTrip> clientTrips = new ArrayList<>();
-//
-//    public void addTrip(ClientTrip trip) {
-//        clientTrips.add(trip);
-//        trip.setClient(this);
-//    }
-//    public void removeTrip(ClientTrip trip) {
-//        clientTrips.remove(trip);
-//        trip.setClient(null);
-//    }
+    private String email;
 }

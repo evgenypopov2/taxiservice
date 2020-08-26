@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.otus.common.dto.TaxiLocationDTO;
 import ru.otus.taxi.model.TaxiCar;
 import ru.otus.taxi.model.TaxiLocation;
 import ru.otus.taxi.model.TaxiState;
@@ -11,6 +12,7 @@ import ru.otus.taxi.repository.TaxiCarRepository;
 import ru.otus.taxi.repository.TaxiLocationRepository;
 
 import java.util.Date;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -22,20 +24,30 @@ public class TaxiLocationService {
 
     @Transactional
     public void fixTaxiLocation(UUID taxiId, double locationLat, double locationLon) {
-        taxiCarRepository.findById(taxiId).ifPresent((taxiCar) -> {
-            Date currentTime = new Date();
-            TaxiLocation taxiLocation = new TaxiLocation();
-            taxiLocation.setTaxiCar(taxiCar);
-            taxiLocation.setLocationLat(locationLat);
-            taxiLocation.setLocationLon(locationLon);
-            taxiLocation.setTime(currentTime);
-            taxiLocationRepository.save(taxiLocation);
+        taxiCarRepository.findById(taxiId).ifPresent(
+                taxiCar -> fixTaxiLocation(taxiCar, locationLat, locationLon));
+    }
 
-            taxiCar.setLastLocationTime(currentTime);
-            taxiCar.setLastLocationLat(locationLat);
-            taxiCar.setLastLocationLon(locationLon);
-            taxiCar.setState(TaxiState.WORKING);
-            taxiCarRepository.save(taxiCar);
-        });
+    @Transactional
+    public void fixTaxiLocation(TaxiLocationDTO taxiLocationDTO) {
+        Optional.of(taxiCarRepository.findByPhone(taxiLocationDTO.getPhone())).ifPresent(
+                taxiCar -> fixTaxiLocation(taxiCar, taxiLocationDTO.getLocationLat(), taxiLocationDTO.getLocationLon())
+        );
+    }
+
+    private void fixTaxiLocation(TaxiCar taxiCar, double locationLat, double locationLon) {
+        Date currentTime = new Date();
+        TaxiLocation taxiLocation = new TaxiLocation();
+        taxiLocation.setTaxiCar(taxiCar);
+        taxiLocation.setLocationLat(locationLat);
+        taxiLocation.setLocationLon(locationLon);
+        taxiLocation.setTime(currentTime);
+        taxiLocationRepository.save(taxiLocation);
+
+        taxiCar.setLastLocationTime(currentTime);
+        taxiCar.setLastLocationLat(locationLat);
+        taxiCar.setLastLocationLon(locationLon);
+        taxiCar.setState(TaxiState.WORKING);
+        taxiCarRepository.save(taxiCar);
     }
 }

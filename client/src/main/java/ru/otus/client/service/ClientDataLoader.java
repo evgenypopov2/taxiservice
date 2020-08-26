@@ -15,8 +15,10 @@ public class ClientDataLoader {
         List<Client> clients = clientService.findAll();
         if (clients.size() == 0) {
             Client client = new Client();
-            client.setName("First client name");
+            client.setFirstName("First client name");
+            client.setLastName("Lasst client name");
             client.setPhone("+7-999-9999999");
+            client.setEmail("client@client.ru");
             clientService.save(client);
         }
     }

@@ -12,6 +12,8 @@ import java.util.UUID;
 
 public interface TaxiCarRepository extends JpaRepository<TaxiCar, UUID> {
 
+    TaxiCar findByPhone(String phone);
+
     @Query("select t from TaxiCar t where t.state = 0 and t.status = 0 and " +
             "t.lastLocationLat < :top and t.lastLocationLat > :bottom and " +
             "t.lastLocationLon > :left and t.lastLocationLon < :right")

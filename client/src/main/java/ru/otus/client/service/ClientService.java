@@ -2,9 +2,9 @@ package ru.otus.client.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.otus.client.dto.ClientDTO;
 import ru.otus.client.model.Client;
 import ru.otus.client.repository.ClientRepository;
+import ru.otus.common.dto.ClientDTO;
 
 import java.util.List;
 import java.util.Optional;
@@ -38,11 +38,17 @@ public class ClientService {
     }
 
     private Client fillClient(Client client, ClientDTO clientDTO) {
-        if (clientDTO.getName() != null) {
-            client.setName(clientDTO.getName());
+        if (clientDTO.getFirstName() != null) {
+            client.setFirstName(clientDTO.getFirstName());
+        }
+        if (clientDTO.getLastName() != null) {
+            client.setLastName(clientDTO.getLastName());
         }
         if (clientDTO.getPhone() != null) {
             client.setPhone(clientDTO.getPhone());
+        }
+        if (clientDTO.getEmail() != null) {
+            client.setEmail(clientDTO.getEmail());
         }
         return client;
     }

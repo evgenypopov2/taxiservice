@@ -3,7 +3,10 @@ package ru.otus.apigateway.service;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.otus.apigateway.dto.RegistrationRequestDTO;
+import ru.otus.apigateway.config.jwt.JwtFilter;
+import ru.otus.apigateway.config.jwt.JwtProvider;
+import ru.otus.apigateway.dto.ClientRegistrationDTO;
+import ru.otus.apigateway.dto.TaxiRegistrationDTO;
 import ru.otus.apigateway.entity.Role;
 import ru.otus.apigateway.entity.User;
 import ru.otus.apigateway.repository.RoleRepository;
@@ -18,20 +21,22 @@ public class UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtFilter jwtFilter;
+    private final JwtProvider jwtProvider;
 
     public List<User> findAll() {
         return userRepository.findAll();
     }
 
-    public User createUser(RegistrationRequestDTO registrationRequestDTO) {
+    public <T extends ClientRegistrationDTO> User createUser(T clientRegistrationRequestDTO) {
         User u = new User();
-        u.setPassword(registrationRequestDTO.getPassword());
-        u.setLogin(registrationRequestDTO.getLogin());
-        u.setFirstName(registrationRequestDTO.getFirstName());
-        u.setLastName(registrationRequestDTO.getLastName());
-        u.setEmail(registrationRequestDTO.getEmail());
-        u.setPhone(registrationRequestDTO.getPhone());
-        return userRepository.save(u);
+        u.setPassword(clientRegistrationRequestDTO.getPassword());
+        u.setLogin(clientRegistrationRequestDTO.getLogin());
+        u.setFirstName(clientRegistrationRequestDTO.getFirstName());
+        u.setLastName(clientRegistrationRequestDTO.getLastName());
+        u.setEmail(clientRegistrationRequestDTO.getEmail());
+        u.setPhone(clientRegistrationRequestDTO.getPhone());
+        return saveUser(u);
     }
 
     public User saveUser(User user) {
@@ -53,5 +58,10 @@ public class UserService {
             }
         }
         return null;
+    }
+
+    public User getUserFromAuthHeader(String authorizationHeader) {
+        return userRepository.findByLogin(
+                jwtProvider.getLoginFromToken(jwtFilter.getTokenFromAuthHeader(authorizationHeader)));
     }
 }

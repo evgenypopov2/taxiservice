@@ -7,10 +7,12 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="route" />
-        <module name="client" />
-        <module name="taxi" />
+        <module name="common" />
+        <module name="order" />
         <module name="apigateway" />
+        <module name="route" />
+        <module name="taxi" />
+        <module name="client" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -21,7 +23,9 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="apigateway" options="-parameters" />
       <module name="client" options="-parameters" />
+      <module name="common" options="-parameters" />
       <module name="messageserver" options="-parameters" />
+      <module name="order" options="-parameters" />
       <module name="route" options="-parameters" />
       <module name="taxi" options="-parameters" />
     </option>
