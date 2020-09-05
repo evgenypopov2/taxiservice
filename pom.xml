@@ -21,7 +21,7 @@
         <module>route</module>
         <module>client</module>
         <module>apigateway</module>
-        <module>order</module>
+        <module>taxiorder</module>
         <module>common</module>
     </modules>
 

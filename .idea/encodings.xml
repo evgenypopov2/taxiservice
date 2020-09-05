@@ -4,8 +4,8 @@
     <file url="file://$PROJECT_DIR$/apigateway/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/client/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/common/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/order/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/route/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/taxi/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/taxiorder/src/main/java" charset="UTF-8" />
   </component>
 </project>

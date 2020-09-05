@@ -2,6 +2,7 @@ package ru.otus.taxi.model;
 
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
+import ru.otus.common.model.TaxiType;
 
 import javax.persistence.*;
 

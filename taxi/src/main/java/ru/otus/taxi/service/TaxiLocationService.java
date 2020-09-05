@@ -4,14 +4,19 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.otus.common.dto.CarInfoDTO;
 import ru.otus.common.dto.TaxiLocationDTO;
 import ru.otus.taxi.model.TaxiCar;
 import ru.otus.taxi.model.TaxiLocation;
 import ru.otus.taxi.model.TaxiState;
+import ru.otus.taxi.model.TaxiVendor;
 import ru.otus.taxi.repository.TaxiCarRepository;
 import ru.otus.taxi.repository.TaxiLocationRepository;
+import ru.otus.taxi.repository.TaxiModelRepository;
+import ru.otus.taxi.repository.TaxiVendorRepository;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 

@@ -1,6 +1,7 @@
 package ru.otus.taxi.model;
 
 import lombok.Data;
+import ru.otus.common.model.TaxiColor;
 
 import javax.persistence.*;
 import java.util.Date;

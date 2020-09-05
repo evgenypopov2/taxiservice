@@ -1,22 +1,30 @@
 package ru.otus.common.dto;
 
 public class TaxiLocationDTO extends TaxiStartWorkDTO {
-    private double locationLat;
-    private double locationLon;
+    private Double locationLat;
+    private Double locationLon;
 
-    public double getLocationLat() {
+    public TaxiLocationDTO(Double locationLat, Double locationLon) {
+        this.locationLat = locationLat;
+        this.locationLon = locationLon;
+    }
+
+    public TaxiLocationDTO() {
+    }
+
+    public Double getLocationLat() {
         return locationLat;
     }
 
-    public void setLocationLat(double locationLat) {
+    public void setLocationLat(Double locationLat) {
         this.locationLat = locationLat;
     }
 
-    public double getLocationLon() {
+    public Double getLocationLon() {
         return locationLon;
     }
 
-    public void setLocationLon(double locationLon) {
+    public void setLocationLon(Double locationLon) {
         this.locationLon = locationLon;
     }
 }

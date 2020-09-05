@@ -1,0 +1,69 @@
+package ru.otus.taxi.config;
+
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.QueueBuilder;
+import org.springframework.amqp.rabbit.annotation.RabbitListenerConfigurer;
+import org.springframework.amqp.rabbit.listener.RabbitListenerEndpointRegistrar;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.converter.MappingJackson2MessageConverter;
+import org.springframework.messaging.handler.annotation.support.DefaultMessageHandlerMethodFactory;
+import org.springframework.messaging.handler.annotation.support.MessageHandlerMethodFactory;
+
+import static ru.otus.common.config.CommonRabbitConfig.*;
+
+@Configuration
+public class TaxiRabbitConfig implements RabbitListenerConfigurer {
+
+    @Bean
+    Queue taxiQueue() {
+        return QueueBuilder.durable(QUEUE_TAXI).build();
+    }
+
+    @Bean
+    Queue taxiStartWorkQueue() {
+        return QueueBuilder.durable(QUEUE_TAXI_START_WORK).build();
+    }
+
+    @Bean
+    Queue taxiLocationQueue() {
+        return QueueBuilder.durable(QUEUE_TAXI_LOCATION).build();
+    }
+
+    @Bean
+    Queue taxiAroundQueue() {
+        return QueueBuilder.durable(QUEUE_TAXI_AROUND).build();
+    }
+
+    @Bean
+    Queue taxiInfoQueue() {
+        return QueueBuilder.durable(QUEUE_TAXI_INFO).build();
+    }
+
+    @Bean
+    Queue taxiIsBusyQueue() {
+        return QueueBuilder.durable(QUEUE_TAXI_IS_BUSY).build();
+    }
+
+    @Bean
+    Queue getCarInfoQueue() {
+        return QueueBuilder.durable(QUEUE_GET_CAR_INFO).build();
+    }
+
+    @Override
+    public void configureRabbitListeners(RabbitListenerEndpointRegistrar registrar) {
+        registrar.setMessageHandlerMethodFactory(messageHandlerMethodFactory());
+    }
+
+    @Bean
+    MessageHandlerMethodFactory messageHandlerMethodFactory() {
+        DefaultMessageHandlerMethodFactory messageHandlerMethodFactory = new DefaultMessageHandlerMethodFactory();
+        messageHandlerMethodFactory.setMessageConverter(consumerJackson2MessageConverter());
+        return messageHandlerMethodFactory;
+    }
+
+    @Bean
+    public MappingJackson2MessageConverter consumerJackson2MessageConverter() {
+        return new MappingJackson2MessageConverter();
+    }
+}
