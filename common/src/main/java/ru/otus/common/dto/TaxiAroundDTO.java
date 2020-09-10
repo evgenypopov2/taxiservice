@@ -1,7 +1,5 @@
 package ru.otus.common.dto;
 
-import ru.otus.common.model.TaxiType;
-
 public class TaxiAroundDTO extends TaxiLocationDTO {
     private Double distance;
 

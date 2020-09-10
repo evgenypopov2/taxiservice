@@ -65,8 +65,15 @@ public class ApiGatewayController {
     ) {
         User user = userService.getUserFromAuthHeader(authorizationHeader);
         if (user != null) {
+            String clientPhone = taxiLocationDTO.getPhone();
             taxiLocationDTO.setPhone(user.getPhone());
             rabbitMessageSender.sendTaxiLocation(taxiLocationDTO);
+            if (clientPhone != null) {
+                OrderOrderResponseDTO responseDTO = new OrderOrderResponseDTO();
+                responseDTO.setLocationLat(taxiLocationDTO.getLocationLat());
+                responseDTO.setLocationLon(taxiLocationDTO.getLocationLon());
+                webSocketMessageSender.sendToClient(clientPhone, responseDTO);
+            }
             return ResponseEntity.ok(HttpStatus.OK.getReasonPhrase());
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(HttpStatus.FORBIDDEN.getReasonPhrase());
@@ -96,7 +103,7 @@ public class ApiGatewayController {
             String message = "Please wait for taxi";
             TaxiAroundListDTO taxiAroundList = rabbitMessageSender.sendOrderOrder(orderOrderDTO);
             if (taxiAroundList.getTaxiList() != null && taxiAroundList.getTaxiList().size() > 0) {
-                webSocketMessageSender.broadcastToTaxi(taxiAroundList);
+                webSocketMessageSender.broadcastToTaxi(taxiAroundList, orderOrderDTO.getPhone());
             } else {
                 message = "No taxi found around";
             }
@@ -106,7 +113,7 @@ public class ApiGatewayController {
     }
 
     @PostMapping("/taxi/take-order")
-    public ResponseEntity<String> takeOrder(
+    public ResponseEntity<TaxiTakeOrderDTO> takeOrder(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader,
             @RequestBody TaxiTakeOrderDTO takeOrderDTO
     ) {
@@ -116,9 +123,13 @@ public class ApiGatewayController {
             OrderOrderResponseDTO response = rabbitMessageSender.sendTakeOrder(takeOrderDTO);
             if (response.getCarModel() != null) { // order taken ok
                 webSocketMessageSender.sendToClient(response.getClientPhone(), response);
-                return ResponseEntity.ok("OK");
+                takeOrderDTO.setOrderId(response.getOrderId());
+                takeOrderDTO.setPhone(response.getClientPhone());
+                return ResponseEntity.ok(takeOrderDTO);
             }
-            return ResponseEntity.ok("It's too late");
+            takeOrderDTO.setOrderId(null);
+            takeOrderDTO.setPhone("It's too late");
+            return ResponseEntity.ok(takeOrderDTO);
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
     }

@@ -17,7 +17,7 @@ public class WebSocketMessageSender {
         this.template = template;
     }
 
-    public void broadcastToTaxi(TaxiAroundListDTO taxiAroundList) {
+    public void broadcastToTaxi(TaxiAroundListDTO taxiAroundList, String clientPhone) {
         if (taxiAroundList.getTaxiList().size() > 0) {
             CompletableFuture.runAsync(() ->
                     taxiAroundList.getTaxiList().forEach(taxiDTO -> template.convertAndSend(
@@ -31,4 +31,7 @@ public class WebSocketMessageSender {
     public void sendToClient(String clientPhone, OrderOrderResponseDTO responseDTO) {
         CompletableFuture.runAsync(() -> template.convertAndSend("/client." + clientPhone, responseDTO));
     }
+    /*public void sendToTaxi(String taxiPhone, OrderOrderResponseDTO responseDTO) {
+        CompletableFuture.runAsync(() -> template.convertAndSend("/taxi." + taxiPhone, responseDTO));
+    }*/
 }

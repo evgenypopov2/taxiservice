@@ -4,25 +4,25 @@ import java.io.Serializable;
 
 public class TaxiTakeOrderDTO implements Serializable {
     private String phone;
-    private long orderId;
+    private Long orderId;
 
-    public TaxiTakeOrderDTO(long orderId) {
+    public TaxiTakeOrderDTO(Long orderId) {
         this.orderId = orderId;
     }
 
     public TaxiTakeOrderDTO() {
     }
 
-    public TaxiTakeOrderDTO(String phone, long orderId) {
+    public TaxiTakeOrderDTO(String phone, Long orderId) {
         this.phone = phone;
         this.orderId = orderId;
     }
 
-    public long getOrderId() {
+    public Long getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(long orderId) {
+    public void setOrderId(Long orderId) {
         this.orderId = orderId;
     }
 

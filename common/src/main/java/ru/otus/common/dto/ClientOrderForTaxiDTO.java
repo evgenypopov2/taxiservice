@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class ClientOrderForTaxiDTO implements Serializable {
     private long orderId;
+    private String clientPhone;
     private RouteDTO route;
 
     public ClientOrderForTaxiDTO(long orderId, RouteDTO route) {
@@ -28,5 +29,13 @@ public class ClientOrderForTaxiDTO implements Serializable {
 
     public void setRoute(RouteDTO route) {
         this.route = route;
+    }
+
+    public String getClientPhone() {
+        return clientPhone;
+    }
+
+    public void setClientPhone(String clientPhone) {
+        this.clientPhone = clientPhone;
     }
 }
