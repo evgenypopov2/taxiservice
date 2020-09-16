@@ -40,10 +40,10 @@ public class TaxiMessageListener {
         taxiCarService.startWork(taxiStartWorkDTO);
     }
 
-    @RabbitListener(queues = QUEUE_TAXI_IS_BUSY)
-    public void processTaxiIsBusy(UUID taxiId) {
-        log.info("Taxi is busy message received: {}", taxiId);
-        taxiCarService.taxiIsBusy(taxiId);
+    @RabbitListener(queues = QUEUE_TAXI_STATUS)
+    public void processTaxiStatus(TaxiStatusDTO taxiStatusDTO) {
+        log.info("Taxi set status message received: {}", taxiStatusDTO);
+        taxiCarService.taxiSetStatus(taxiStatusDTO);
     }
 
     @RabbitListener(queues = QUEUE_TAXI_LOCATION)

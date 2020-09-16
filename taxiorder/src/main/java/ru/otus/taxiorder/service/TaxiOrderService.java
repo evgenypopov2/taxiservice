@@ -103,9 +103,23 @@ public class TaxiOrderService {
                 response.setDriverPhone(taxi.getPhone());
                 response.setLocationLat(taxi.getLocationLat());
                 response.setLocationLon(taxi.getLocationLon());
-                response.setEstimatedTime(5);
+                response.setEstimatedTime(5L);
             }
         }
         return response;
+    }
+
+    public String processOrderCancel(OrderCancelDTO orderCancelDTO) {
+        String taxiPhone = null;
+        TaxiOrder taxiOrder = taxiOrderRepository.findById(orderCancelDTO.getOrderId()).orElse(null);
+        if (taxiOrder != null && taxiOrder.getTaxiId() != null) {
+            taxiPhone = taxiOrder.getTaxiPhone();
+
+            taxiOrderMessageSender.sendTaxiIsFree(taxiOrder.getTaxiId());
+
+            taxiOrder.setCancelDate(new Date());
+            taxiOrderRepository.save(taxiOrder);
+        }
+        return taxiPhone;
     }
 }

@@ -32,6 +32,12 @@ public class TaxiOrderMessageListener {
         return taxiOrderService.processOrderOrder(orderOrderDTO);
     }
 
+    @RabbitListener(queues = QUEUE_ORDER_CANCEL)
+    public String processOrderCancel(OrderCancelDTO orderCancelDTO) {
+        log.info("Order cancel message received: {}", orderCancelDTO);
+        return taxiOrderService.processOrderCancel(orderCancelDTO);
+    }
+
     @RabbitListener(queues = QUEUE_TAXI_TAKE_ORDER)
     public OrderOrderResponseDTO processTakeOrder(TaxiTakeOrderDTO takeOrderDTO) {
         log.info("Taxi take order message received: {}", takeOrderDTO);

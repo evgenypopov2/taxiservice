@@ -1,13 +1,13 @@
 package ru.otus.apigateway.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
-import ru.otus.common.dto.ClientOrderForTaxiDTO;
-import ru.otus.common.dto.OrderOrderResponseDTO;
-import ru.otus.common.dto.TaxiAroundListDTO;
+import ru.otus.common.dto.*;
 
 import java.util.concurrent.CompletableFuture;
 
+@Slf4j
 @Service
 public class WebSocketMessageSender {
 
@@ -17,21 +17,24 @@ public class WebSocketMessageSender {
         this.template = template;
     }
 
-    public void broadcastToTaxi(TaxiAroundListDTO taxiAroundList, String clientPhone) {
+    public void broadcastToTaxi(TaxiAroundListDTO taxiAroundList) {
         if (taxiAroundList.getTaxiList().size() > 0) {
             CompletableFuture.runAsync(() ->
-                    taxiAroundList.getTaxiList().forEach(taxiDTO -> template.convertAndSend(
-                            "/taxi." + taxiDTO.getPhone(),
-                            new ClientOrderForTaxiDTO(taxiAroundList.getOrderId(), taxiAroundList.getRoute()))
-                    )
+                taxiAroundList.getTaxiList().forEach(taxiDTO -> {
+                    template.convertAndSend(
+                                    "/taxi." + taxiDTO.getPhone(),
+                                    new ClientOrderForTaxiDTO(taxiAroundList.getOrderId(), taxiAroundList.getRoute()));
+                    log.info("Client order request sent to taxi {}", taxiDTO.getPhone());
+                })
             );
         }
     }
 
-    public void sendToClient(String clientPhone, OrderOrderResponseDTO responseDTO) {
-        CompletableFuture.runAsync(() -> template.convertAndSend("/client." + clientPhone, responseDTO));
+    public void sendToClient(String clientPhone, Object messageForClient) {
+        CompletableFuture.runAsync(() -> template.convertAndSend("/client." + clientPhone, messageForClient));
     }
-    /*public void sendToTaxi(String taxiPhone, OrderOrderResponseDTO responseDTO) {
-        CompletableFuture.runAsync(() -> template.convertAndSend("/taxi." + taxiPhone, responseDTO));
-    }*/
+
+    public void sendToTaxi(String taxiPhone, OrderCancelDTO orderCancelDTO) {
+        CompletableFuture.runAsync(() -> template.convertAndSend("/taxi." + taxiPhone, orderCancelDTO));
+    }
 }

@@ -43,6 +43,58 @@ public class ApiGatewayController {
                 : ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
     }
 
+    @PostMapping("/client/order-request")
+    public ResponseEntity<OrderRequestResponseDTO> getRouteVariants(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader,
+            @RequestBody OrderRequestDTO orderRequestDTO
+    ) {
+        User user = userService.getUserFromAuthHeader(authorizationHeader);
+        if (user != null) {
+            orderRequestDTO.setPhone(user.getPhone());
+            OrderRequestResponseDTO responseDTO = rabbitMessageSender.sendOrderRequest(orderRequestDTO);
+            return ResponseEntity.ok(responseDTO);
+        }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+    }
+
+    @PostMapping("/client/order-order")
+    public ResponseEntity<String> createOrder(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader,
+            @RequestBody OrderOrderDTO orderOrderDTO
+    ) {
+        User user = userService.getUserFromAuthHeader(authorizationHeader);
+        if (user != null) {
+            orderOrderDTO.setPhone(user.getPhone());
+            String message = "Please wait for taxi";
+            TaxiAroundListDTO taxiAroundList = rabbitMessageSender.sendOrderOrder(orderOrderDTO);
+            if (taxiAroundList.getTaxiList() != null && taxiAroundList.getTaxiList().size() > 0) {
+                webSocketMessageSender.broadcastToTaxi(taxiAroundList);
+            } else {
+                message = "No taxi found around";
+            }
+            return ResponseEntity.ok(message);
+        }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+    }
+
+    @PostMapping("/client/order-cancel")
+    public ResponseEntity<String> cancelOrder(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader,
+            @RequestBody OrderCancelDTO orderCancelDTO
+    ) {
+        User user = userService.getUserFromAuthHeader(authorizationHeader);
+        if (user != null) {
+            String taxiPhone = rabbitMessageSender.sendOrderCancel(orderCancelDTO);
+            if (taxiPhone != null) {
+                webSocketMessageSender.sendToTaxi(taxiPhone, orderCancelDTO);
+            }
+            return ResponseEntity.ok("Order cancelled");
+        }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+    }
+
+    //=============== taxi methods ======================
+
     @PostMapping("/taxi/register")
     public ResponseEntity<TaxiDTO> registerTaxi(@RequestBody @Valid TaxiRegistrationDTO taxiRegistrationRequestDTO) {
         User user = userService.createUser(taxiRegistrationRequestDTO);
@@ -69,47 +121,11 @@ public class ApiGatewayController {
             taxiLocationDTO.setPhone(user.getPhone());
             rabbitMessageSender.sendTaxiLocation(taxiLocationDTO);
             if (clientPhone != null) {
-                OrderOrderResponseDTO responseDTO = new OrderOrderResponseDTO();
-                responseDTO.setLocationLat(taxiLocationDTO.getLocationLat());
-                responseDTO.setLocationLon(taxiLocationDTO.getLocationLon());
-                webSocketMessageSender.sendToClient(clientPhone, responseDTO);
+                webSocketMessageSender.sendToClient(clientPhone, taxiLocationDTO);
             }
             return ResponseEntity.ok(HttpStatus.OK.getReasonPhrase());
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(HttpStatus.FORBIDDEN.getReasonPhrase());
-    }
-
-    @PostMapping("/client/order-request")
-    public ResponseEntity<OrderRequestResponseDTO> getRouteVariants(
-            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader,
-            @RequestBody OrderRequestDTO orderRequestDTO
-    ) {
-        User user = userService.getUserFromAuthHeader(authorizationHeader);
-        if (user != null) {
-            orderRequestDTO.setPhone(user.getPhone());
-            OrderRequestResponseDTO responseDTO = rabbitMessageSender.sendOrderRequest(orderRequestDTO);
-            return ResponseEntity.ok(responseDTO);
-        }
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
-    }
-    @PostMapping("/client/order-order")
-    public ResponseEntity<String> createOrder(
-            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader,
-            @RequestBody OrderOrderDTO orderOrderDTO
-    ) {
-        User user = userService.getUserFromAuthHeader(authorizationHeader);
-        if (user != null) {
-            orderOrderDTO.setPhone(user.getPhone());
-            String message = "Please wait for taxi";
-            TaxiAroundListDTO taxiAroundList = rabbitMessageSender.sendOrderOrder(orderOrderDTO);
-            if (taxiAroundList.getTaxiList() != null && taxiAroundList.getTaxiList().size() > 0) {
-                webSocketMessageSender.broadcastToTaxi(taxiAroundList, orderOrderDTO.getPhone());
-            } else {
-                message = "No taxi found around";
-            }
-            return ResponseEntity.ok(message);
-        }
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
     }
 
     @PostMapping("/taxi/take-order")

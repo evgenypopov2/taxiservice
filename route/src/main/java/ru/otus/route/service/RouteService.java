@@ -14,12 +14,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static ru.otus.common.model.GeoConstants.COORDS_SHIFT_1KM_X;
+import static ru.otus.common.model.GeoConstants.COORDS_SHIFT_1KM_Y;
+
 @Service
 @AllArgsConstructor
 public class RouteService {
 
-    private static final double COORDS_SHIFT_1KM_Y = 0.008951D;
-    private static final double COORDS_SHIFT_1KM_X = 0.015879D;
     private static final double AVERAGE_STRAIGHT_PART_LENGTH = 0.2D;
     private static final double MIN_SPEED = 20D;
     private static final double MAX_SPEED = 80D;
@@ -79,7 +80,7 @@ public class RouteService {
                 routeCalcDTO.getEndLat(), routeCalcDTO.getEndLon()
         );
         if (routePartList.size() > 0) {
-            float length = calcRouteLength(routePartList);
+            double length = calcRouteLength(routePartList);
             RouteDTO routeDTO = new RouteDTO();
             routeDTO.setLength((double) length);
             routeDTO.setRouteParts(
@@ -95,8 +96,8 @@ public class RouteService {
         return null;
     }
 
-    private float calcRouteLength(List<RoutePart> routePartList) {
-        float length = 0;
+    private double calcRouteLength(List<RoutePart> routePartList) {
+        double length = 0;
         double lastLat = 0D;
         double lastLon = 0D;
 

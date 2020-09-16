@@ -6,9 +6,9 @@ import java.io.Serializable;
 
 public class RoutePriceDTO implements Serializable {
     private TaxiType taxiType;
-    private int price;
+    private Long price;
 
-    public RoutePriceDTO(TaxiType taxiType, int price) {
+    public RoutePriceDTO(TaxiType taxiType, Long price) {
         this.taxiType = taxiType;
         this.price = price;
     }
@@ -24,11 +24,11 @@ public class RoutePriceDTO implements Serializable {
         this.taxiType = taxiType;
     }
 
-    public int getPrice() {
+    public Long getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(Long price) {
         this.price = price;
     }
 }

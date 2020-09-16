@@ -1,4 +1,4 @@
-package ru.otus.taxi.model;
+package ru.otus.common.model;
 
 public enum TaxiStatus {
     FREE,

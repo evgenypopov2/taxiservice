@@ -3,11 +3,13 @@ package ru.otus.common.dto;
 import java.io.Serializable;
 
 public class ClientOrderForTaxiDTO implements Serializable {
-    private long orderId;
+    private String messageClass;
+    private Long orderId;
     private String clientPhone;
     private RouteDTO route;
 
-    public ClientOrderForTaxiDTO(long orderId, RouteDTO route) {
+    public ClientOrderForTaxiDTO(Long orderId, RouteDTO route) {
+        this.messageClass = this.getClass().getSimpleName();
         this.orderId = orderId;
         this.route = route;
     }
@@ -15,11 +17,11 @@ public class ClientOrderForTaxiDTO implements Serializable {
     public ClientOrderForTaxiDTO() {
     }
 
-    public long getOrderId() {
+    public Long getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(long orderId) {
+    public void setOrderId(Long orderId) {
         this.orderId = orderId;
     }
 
@@ -37,5 +39,13 @@ public class ClientOrderForTaxiDTO implements Serializable {
 
     public void setClientPhone(String clientPhone) {
         this.clientPhone = clientPhone;
+    }
+
+    public String getMessageClass() {
+        return messageClass;
+    }
+
+    public void setMessageClass(String messageClass) {
+        this.messageClass = messageClass;
     }
 }

@@ -37,6 +37,7 @@ public class TaxiOrder {
     private Date requestDate;
     private Date orderDate;
     private Date cancelDate;
+    private Date startDate;
     private Date finishDate;
     private UUID clientId;
     private String clientPhone;
@@ -45,6 +46,6 @@ public class TaxiOrder {
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
     private RouteDTO route;
-    private int price;
-    private int clientMark;
+    private long price;
+    private long clientMark;
 }

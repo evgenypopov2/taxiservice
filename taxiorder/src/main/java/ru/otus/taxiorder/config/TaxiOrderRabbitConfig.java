@@ -46,8 +46,8 @@ public class TaxiOrderRabbitConfig implements RabbitListenerConfigurer {
     }
 
     @Bean
-    Queue taxiIsBusyQueue() {
-        return QueueBuilder.durable(QUEUE_TAXI_IS_BUSY).build();
+    Queue taxiSetStatusQueue() {
+        return QueueBuilder.durable(QUEUE_TAXI_STATUS).build();
     }
 
     public void configureRabbitListeners(RabbitListenerEndpointRegistrar registrar) {

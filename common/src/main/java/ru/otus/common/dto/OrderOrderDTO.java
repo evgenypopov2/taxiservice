@@ -6,10 +6,10 @@ import java.io.Serializable;
 
 public class OrderOrderDTO implements Serializable {
     private String phone;
-    private long orderId;
+    private Long orderId;
     private TaxiType taxiType;
 
-    public OrderOrderDTO(String phone, long orderId, TaxiType taxiType) {
+    public OrderOrderDTO(String phone, Long orderId, TaxiType taxiType) {
         this.phone = phone;
         this.orderId = orderId;
         this.taxiType = taxiType;
@@ -26,11 +26,11 @@ public class OrderOrderDTO implements Serializable {
         this.phone = phone;
     }
 
-    public long getOrderId() {
+    public Long getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(long orderId) {
+    public void setOrderId(Long orderId) {
         this.orderId = orderId;
     }
 

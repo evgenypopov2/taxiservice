@@ -3,18 +3,18 @@ package ru.otus.common.dto;
 import java.io.Serializable;
 
 public class OrderRequestResponseDTO implements Serializable {
-    private long id;
+    private Long id;
     private Double startLat;
     private Double startLon;
     private Double endLat;
     private Double endLon;
     private RouteDTO route;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

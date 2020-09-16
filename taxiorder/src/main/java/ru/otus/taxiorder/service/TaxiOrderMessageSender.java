@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 import ru.otus.common.dto.*;
+import ru.otus.common.model.TaxiStatus;
 
 import java.util.List;
 import java.util.UUID;
@@ -35,6 +36,12 @@ public class TaxiOrderMessageSender {
     }
 
     public void sendTaxiIsBusy(UUID id) {
-        rabbitTemplate.convertAndSend(QUEUE_TAXI_IS_BUSY, id);
+        sendTaxiStatus(id, TaxiStatus.BUSY);
+    }
+    public void sendTaxiIsFree(UUID id) {
+        sendTaxiStatus(id, TaxiStatus.FREE);
+    }
+    public void sendTaxiStatus(UUID id, TaxiStatus status) {
+        rabbitTemplate.convertAndSend(QUEUE_TAXI_STATUS, new TaxiStatusDTO(id, status));
     }
 }

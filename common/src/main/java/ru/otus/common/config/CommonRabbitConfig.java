@@ -9,7 +9,7 @@ public class CommonRabbitConfig {
     public static final String QUEUE_TAXI_LOCATION = "taxi-location";
     public static final String QUEUE_TAXI_AROUND = "taxi-around";
     public static final String QUEUE_TAXI_TAKE_ORDER = "taxi-take-order";
-    public static final String QUEUE_TAXI_IS_BUSY = "taxi-is-busy";
+    public static final String QUEUE_TAXI_STATUS = "taxi-status";
     public static final String QUEUE_ORDER_REQUEST = "order-request";
     public static final String QUEUE_ORDER_ORDER = "order-order";
     public static final String QUEUE_ORDER_CANCEL = "order-cancel";

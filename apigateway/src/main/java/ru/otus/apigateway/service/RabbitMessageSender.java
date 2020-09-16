@@ -55,4 +55,9 @@ public class RabbitMessageSender {
         return (CarInfoDTO) rabbitTemplate.convertSendAndReceive(
                 QUEUE_GET_CAR_INFO, "Give me please car info");
     }
+
+    public String sendOrderCancel(OrderCancelDTO orderCancelDTO) {
+        return (String) rabbitTemplate.convertSendAndReceive(
+                QUEUE_ORDER_CANCEL, orderCancelDTO);
+    }
 }

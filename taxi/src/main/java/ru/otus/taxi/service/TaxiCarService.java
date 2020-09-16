@@ -6,21 +6,22 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.common.dto.TaxiDTO;
 import ru.otus.common.dto.TaxiStartWorkDTO;
-import ru.otus.common.model.TaxiType;
+import ru.otus.common.dto.TaxiStatusDTO;
 import ru.otus.taxi.model.TaxiCar;
 import ru.otus.common.model.TaxiColor;
 import ru.otus.taxi.model.TaxiState;
-import ru.otus.taxi.model.TaxiStatus;
+import ru.otus.common.model.TaxiStatus;
 import ru.otus.taxi.repository.TaxiCarRepository;
 
 import java.util.*;
+
+import static ru.otus.common.model.GeoConstants.COORDS_SHIFT_1KM_X;
+import static ru.otus.common.model.GeoConstants.COORDS_SHIFT_1KM_Y;
 
 @Service
 @AllArgsConstructor
 public class TaxiCarService {
 
-    private static final double COORDS_SHIFT_1KM_Y = 0.008951D;
-    private static final double COORDS_SHIFT_1KM_X = 0.015879D;
     private static final int INACTIVITY_PERIOD = 1; // 1 hour of inactivity
 
     private final TaxiCarRepository taxiCarRepository;
@@ -38,9 +39,9 @@ public class TaxiCarService {
         return taxiCarRepository.findByPhone(phone);
     }
 
-    public void taxiIsBusy(UUID taxiId) {
-        taxiCarRepository.findById(taxiId).map(taxiCar -> {
-            taxiCar.setStatus(TaxiStatus.BUSY);
+    public void taxiSetStatus(TaxiStatusDTO taxiStatusDTO) {
+        taxiCarRepository.findById(taxiStatusDTO.getId()).map(taxiCar -> {
+            taxiCar.setStatus(taxiStatusDTO.getStatus());
             return taxiCarRepository.save(taxiCar);
         });
     }
@@ -59,10 +60,6 @@ public class TaxiCarService {
     public TaxiCar createTaxiCar(TaxiDTO taxiCreateDTO) {
         return taxiCarRepository.save(fillTaxiCar(new TaxiCar(), taxiCreateDTO));
     }
-
-    /*public TaxiCar createTaxiCar(TaxiCarDTO taxiCarDTO) {
-        return taxiCarRepository.save(fillTaxiCar(new TaxiCar(), taxiCarDTO));
-    }*/
 
     public TaxiCar updateTaxiCar(UUID id, TaxiDTO taxiCarDTO) {
         return taxiCarRepository.findById(id)
@@ -113,5 +110,4 @@ public class TaxiCarService {
             taxiCarRepository.save(taxiCar);
         }
     }
-
 }

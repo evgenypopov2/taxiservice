@@ -4,11 +4,11 @@ import java.io.Serializable;
 import java.util.List;
 
 public class TaxiAroundListDTO implements Serializable {
-    private long orderId;
+    private Long orderId;
     private List<TaxiDTO> taxiList;
     private RouteDTO route;
 
-    public TaxiAroundListDTO(long orderId, List<TaxiDTO> taxiList, RouteDTO route) {
+    public TaxiAroundListDTO(Long orderId, List<TaxiDTO> taxiList, RouteDTO route) {
         this.orderId = orderId;
         this.taxiList = taxiList;
         this.route = route;
@@ -33,11 +33,11 @@ public class TaxiAroundListDTO implements Serializable {
         this.route = route;
     }
 
-    public long getOrderId() {
+    public Long getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(long orderId) {
+    public void setOrderId(Long orderId) {
         this.orderId = orderId;
     }
 }

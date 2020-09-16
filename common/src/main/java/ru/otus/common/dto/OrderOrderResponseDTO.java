@@ -4,7 +4,8 @@ import java.io.Serializable;
 import java.util.UUID;
 
 public class OrderOrderResponseDTO implements Serializable {
-    private long orderId;
+    private String messageClass;
+    private Long orderId;
     private UUID clientId;
     private String clientPhone;
     private UUID taxiId;
@@ -15,15 +16,19 @@ public class OrderOrderResponseDTO implements Serializable {
     private String carColor;
     private String carVendor;
     private String carModel;
-    private int estimatedTime;
+    private Long estimatedTime;
     private Double locationLat;
     private Double locationLon;
 
-    public long getOrderId() {
+    public OrderOrderResponseDTO() {
+        this.messageClass = this.getClass().getSimpleName();
+    }
+
+    public Long getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(long orderId) {
+    public void setOrderId(Long orderId) {
         this.orderId = orderId;
     }
 
@@ -83,11 +88,11 @@ public class OrderOrderResponseDTO implements Serializable {
         this.carModel = carModel;
     }
 
-    public int getEstimatedTime() {
+    public Long getEstimatedTime() {
         return estimatedTime;
     }
 
-    public void setEstimatedTime(int estimatedTime) {
+    public void setEstimatedTime(Long estimatedTime) {
         this.estimatedTime = estimatedTime;
     }
 
@@ -128,5 +133,13 @@ public class OrderOrderResponseDTO implements Serializable {
 
     public void setClientPhone(String clientPhone) {
         this.clientPhone = clientPhone;
+    }
+
+    public String getMessageClass() {
+        return messageClass;
+    }
+
+    public void setMessageClass(String messageClass) {
+        this.messageClass = messageClass;
     }
 }
