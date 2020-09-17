@@ -40,7 +40,10 @@ public class TaxiCarService {
     }
 
     public void taxiSetStatus(TaxiStatusDTO taxiStatusDTO) {
-        taxiCarRepository.findById(taxiStatusDTO.getId()).map(taxiCar -> {
+        (taxiStatusDTO.getId() == null
+                ? Optional.of(taxiCarRepository.findByPhone(taxiStatusDTO.getPhone()))
+                : taxiCarRepository.findById(taxiStatusDTO.getId()))
+        .map(taxiCar -> {
             taxiCar.setStatus(taxiStatusDTO.getStatus());
             return taxiCarRepository.save(taxiCar);
         });

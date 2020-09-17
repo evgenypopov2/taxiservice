@@ -60,4 +60,9 @@ public class RabbitMessageSender {
         return (String) rabbitTemplate.convertSendAndReceive(
                 QUEUE_ORDER_CANCEL, orderCancelDTO);
     }
+
+    public String sendTaxiStatus(TaxiStatusDTO taxiStatusDTO) {
+        return (String) rabbitTemplate.convertSendAndReceive(
+                QUEUE_TAXI_STATUS, taxiStatusDTO);
+    }
 }

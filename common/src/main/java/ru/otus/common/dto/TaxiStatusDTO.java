@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.UUID;
 
 public class TaxiStatusDTO implements Serializable {
+    private String phone;
     private UUID id;
     private TaxiStatus status;
 
@@ -15,6 +16,11 @@ public class TaxiStatusDTO implements Serializable {
     }
 
     public TaxiStatusDTO() {
+    }
+
+    public TaxiStatusDTO(String phone, TaxiStatus status) {
+        this.phone = phone;
+        this.status = status;
     }
 
     public UUID getId() {
@@ -31,5 +37,13 @@ public class TaxiStatusDTO implements Serializable {
 
     public void setStatus(TaxiStatus status) {
         this.status = status;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }

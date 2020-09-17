@@ -55,6 +55,11 @@ public class ApiGatewayRabbitConfig implements RabbitListenerConfigurer {
     }
 
     @Bean
+    Queue taxiStatusQueue() {
+        return QueueBuilder.durable(QUEUE_TAXI_STATUS).build();
+    }
+
+    @Bean
     Queue getCarInfoQueue() {
         return QueueBuilder.durable(QUEUE_GET_CAR_INFO).build();
     }

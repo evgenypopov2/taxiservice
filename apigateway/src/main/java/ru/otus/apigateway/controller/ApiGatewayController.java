@@ -128,6 +128,19 @@ public class ApiGatewayController {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(HttpStatus.FORBIDDEN.getReasonPhrase());
     }
 
+    @PostMapping("/taxi/status")
+    public ResponseEntity<String> taxiStatus(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader,
+            @RequestBody @Valid TaxiStatusDTO taxiStatusDTO
+    ) {
+        User user = userService.getUserFromAuthHeader(authorizationHeader);
+        if (user != null) {
+            rabbitMessageSender.sendTaxiStatus(taxiStatusDTO);
+            return ResponseEntity.ok(HttpStatus.OK.getReasonPhrase());
+        }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(HttpStatus.FORBIDDEN.getReasonPhrase());
+    }
+
     @PostMapping("/taxi/take-order")
     public ResponseEntity<TaxiTakeOrderDTO> takeOrder(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader,
