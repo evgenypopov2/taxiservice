@@ -32,7 +32,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/client/register"
                         , "/client/auth"
                         , "/taxi/register"
+                        , "/taxi/car-info"
                         , "/taxi/auth"
+                        ,"/client-websocket"
                 ).permitAll()
                 .antMatchers(
                         "/taxi/location"

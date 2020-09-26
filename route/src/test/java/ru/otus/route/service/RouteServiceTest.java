@@ -13,10 +13,12 @@ import static org.junit.jupiter.api.Assertions.*;
 class RouteServiceTest {
 
     private RouteService routeService;
+    private PriceService priceService;
 
     @BeforeEach
     void init() {
-        routeService = new RouteService();
+        priceService = new PriceService();
+        routeService = new RouteService(priceService);
     }
     @Test
     void calcRouteTest() {

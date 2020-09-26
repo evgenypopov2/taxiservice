@@ -18,6 +18,9 @@ public class ClientService {
     public Optional<Client> findById(UUID id) {
         return clientRepository.findById(id);
     }
+    public Optional<Client> findByPhone(String phone) {
+        return clientRepository.findByPhone(phone);
+    }
 
     public Client save(Client client) {
         return clientRepository.save(client);

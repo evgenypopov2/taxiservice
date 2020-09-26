@@ -6,6 +6,8 @@ public class TaxiDTO extends ClientDTO {
     private String carModel;
     private String carNumber;
     private String carColor;
+    private Double locationLat;
+    private Double locationLon;
 
     public String getCarNumber() {
         return carNumber;
@@ -37,5 +39,21 @@ public class TaxiDTO extends ClientDTO {
 
     public String getCarModel() {
         return carModel;
+    }
+
+    public Double getLocationLat() {
+        return locationLat;
+    }
+
+    public void setLocationLat(Double locationLat) {
+        this.locationLat = locationLat;
+    }
+
+    public Double getLocationLon() {
+        return locationLon;
+    }
+
+    public void setLocationLon(Double locationLon) {
+        this.locationLon = locationLon;
     }
 }

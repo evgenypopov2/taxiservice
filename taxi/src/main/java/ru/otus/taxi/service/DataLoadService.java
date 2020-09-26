@@ -2,9 +2,9 @@ package ru.otus.taxi.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.otus.taxi.model.TaxiColor;
+import ru.otus.common.model.TaxiColor;
 import ru.otus.taxi.model.TaxiModel;
-import ru.otus.taxi.model.TaxiType;
+import ru.otus.common.model.TaxiType;
 import ru.otus.taxi.model.TaxiVendor;
 
 import java.util.Arrays;
